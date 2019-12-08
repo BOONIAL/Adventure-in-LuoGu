@@ -1,0 +1,55 @@
+//https://www.luogu.com.cn/problem/P1042
+//11分制胜出规则：双方比分差大于等于2的情况下，一方拿到11分及以上则胜利。（不懂规则害死人）
+#include<iostream>
+
+using namespace std;
+const int MAXN=100000;
+void pattern(int len,int pat,char c[MAXN])//pat：规则
+{
+    int w=0,l=0;
+    int p=0;//“指针”
+    while(1){
+        if(p==len){//未完成的比赛
+            cout<<w<<":"<<l<<endl;
+            break;
+        }
+        while(1){//已完成的比赛
+            if(p>=len)
+                break;
+            else{
+                if(c[p++]=='W')
+                    w++;
+                else
+                    l++;
+                }
+                if((w-l>=2||l-w>=2)&&(w>=pat||l>=pat)){
+                    cout<<w<<":"<<l<<endl;
+                    w=l=0;//清空已完成的比赛
+                    break;
+                }
+    }
+}
+}
+int main()
+{
+    char c[MAXN]={0};
+    char temp;
+    int len=0;//数组长度
+    for(int i=0;i<MAXN;i++){
+        cin>>temp;
+        if(temp=='E')
+            break;
+        else if(temp!='\n'){
+            len++;
+            c[i]=temp;
+        }
+    }
+    if(!len)
+        cout<<"0:0"<<endl<<endl<<"0:0"<<endl;
+    else{
+        pattern(len,11,c);
+        cout<<endl;
+        pattern(len,21,c);
+    }
+
+}
