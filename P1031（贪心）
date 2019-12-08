@@ -1,0 +1,32 @@
+//原题地址：https://www.luogu.com.cn/problem/P1031
+//贪心：让每一堆纸牌满足最优解，全局会达到最优。
+#include<iostream>
+
+using namespace std;
+int main()
+{
+    int n;
+    int a[105]={0};
+    int sum=0;
+    int stda;
+    int t=0;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        cin>>a[i];
+        sum+=a[i];
+    }
+    stda=sum/n;
+    //cout<<stda<<endl;
+    for(int i=0;i<n-1;i++)
+    {
+        if(a[i]!=stda)
+        {
+            //cout<<"a["<<i<<"]: "<<a[i]<<endl;
+            a[i+1]+=(a[i]-stda);//一开始与下面的代码颠倒，wa了2次。。。
+            a[i]=stda;
+            t++;
+        }
+    }
+    cout<<t;
+}
