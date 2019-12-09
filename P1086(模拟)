@@ -1,0 +1,60 @@
+//https://www.luogu.com.cn/problem/P1086
+#include<iostream>
+#include<math.h>
+
+using namespace std;
+const int MAXN=25;
+int tar_y(int pla[MAXN][MAXN],int m,int n)//找目前最大值
+{
+    int tary;
+    int maxnum=0;
+    for(int i=1;i<=m;i++)
+        for(int j=1;j<=n;j++){
+            if(pla[j][i]>maxnum){
+                    maxnum=pla[j][i];
+                    tary=i;
+            }
+        }
+    return tary;
+}
+int tar_x(int pla[MAXN][MAXN],int m,int n)
+{
+    int tarx;
+    int maxnum=0;
+    for(int i=1;i<=m;i++)
+        for(int j=1;j<=n;j++){
+            if(pla[j][i]>maxnum){
+                    maxnum=pla[j][i];
+                    tarx=j;
+            }
+        }
+    return tarx;
+}
+int main()
+{
+    int m,n,k;
+    int pla[MAXN][MAXN]={0};
+    cin>>m>>n>>k;
+    for(int i=1;i<=m;i++)
+        for(int j=1;j<=n;j++)
+            cin>>pla[j][i];//更符合现实坐标的数组
+    int mx=0,my=0,tarx,tary,harv=0;
+    mx=tar_x(pla,m,n);
+    while(k){
+        //whether can back?
+        tarx=tar_x(pla,m,n);
+        tary=tar_y(pla,m,n);
+        if(k-abs(tarx-mx)-abs(tary-my)-1>=tary){//action!剩下时间-（去时+摘时）>=从该处回去的时间
+            k-=(abs(tarx-mx)+abs(tary-my)+1);
+            mx=tarx;
+            my=tary;
+            harv+=pla[tarx][tary];
+            pla[tarx][tary]=0;
+            //cout<<"("<<mx<<","<<my<<") t:"<<k<<endl;
+        }
+        else{//back
+            break;
+        }
+    }
+    cout<<harv;
+}
