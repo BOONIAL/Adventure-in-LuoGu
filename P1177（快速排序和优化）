@@ -1,0 +1,98 @@
+//https://www.luogu.com.cn/problem/P1177，基本概念：https://www.cnblogs.com/skywang12345/p/3596746.html
+//初版
+#include<iostream>
+
+using namespace std;
+const int MAXN=100005;
+void quick_sort(long long *a,int l,int r)
+{
+    if(l<r)
+    {
+        long long temp;
+        int i=l;
+        int j=r;
+        temp=a[l];//枢轴
+        while(i<j)
+        {
+            //先从右往左再从左往右，顺序有影响？！原因：设的枢轴在左边，先从左往右会让右边的元素永久性改变，无法再排序。
+            while(i<j&&a[j]>temp)//从右往左找第一个小于等于枢轴的数
+                j--;
+            if(i<j)
+                a[i++]=a[j];//存在则将a[j]放到枢轴前面
+            while(i<j&&a[i]<temp)//从左往右找第一个大于等于枢轴的数
+                i++;
+            if(i<j)
+                a[j--]=a[i];
+            /*while(i<j&&a[j]>temp)
+                j--;
+            if(i<j)
+                a[i++]=a[j];*/
+        }
+        a[i]=temp;//确定枢轴
+        quick_sort(a,l,i-1);
+        quick_sort(a,i+1,r);
+    }
+}
+
+int main()
+{
+    int n;
+    long long a[MAXN]={0};
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        cin>>a[i];
+    }
+    quick_sort(a,0,n-1);
+    for(int i=0;i<n;i++)
+    {
+        cout<<a[i];
+        if(i!=n-1)
+            cout<<" ";
+        else
+            cout<<endl;
+    }
+}
+
+//改良版
+#include<iostream>
+
+using namespace std;
+int n,a[1000001];
+void quick_sort(int l,int r)
+{
+        int temp;
+        int i=l;
+        int j=r;
+        temp=a[(l+r)/2];//枢轴,也是中间值，数字更具随机性，效率更高。
+        do{
+            while(a[i]<temp)//从左往右找第一个大于枢轴的数。
+                i++;
+            while(a[j]>temp)//从右往左找第一个小于枢轴的数。
+                j--;
+            if(i<=j)
+                swap(a[i++],a[j--]);//交换
+        }while(i<=j);//i=j时j--,i++，越过枢轴。
+        if(l<j) quick_sort(l,j);//递归搜索左半部分
+        if(i<r) quick_sort(i,r);//递归搜索右半部分
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        cin>>a[i];
+    }
+    quick_sort(0,n-1);
+    for(int i=0;i<n;i++)
+    {
+        cout<<a[i];
+        if(i!=n-1)
+            cout<<" ";
+        else
+            cout<<endl;
+    }
+}
+
+
