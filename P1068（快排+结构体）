@@ -1,0 +1,65 @@
+//https://www.luogu.com.cn/problem/P1068
+#include<iostream>
+
+using namespace std;
+const int MAXN=5005;
+struct volun//结构体在数据联系方面有较多便利
+{
+    int name;
+    int grade;
+};
+struct volun vol[MAXN];
+void quick_sort(int l,int r)//快排成绩
+{
+    int temp;
+    int i=l;
+    int j=r;
+    temp=vol[(l+r)/2].grade;
+    do{
+        while(vol[i].grade>temp)//降序
+            i++;
+        while(vol[j].grade<temp)
+            j--;
+        if(i<=j)
+            swap(vol[i++],vol[j--]);//结构体交换巨方便，交换结构体内的所以变量
+    }while(i<=j);
+    if(l<j) quick_sort(l,j);
+    if(i<r) quick_sort(i,r);
+}
+
+void bubble_sort(int n)//小型冒泡，在成绩相同时，对考号进行排序
+{
+    for(int i=0;i<n-1;i++)
+    {
+        for(int j=0;j<n-1-i;j++)
+            if(vol[j].grade==vol[j+1].grade&&vol[j].name>=vol[j+1].name)
+                swap(vol[j],vol[j+1]);
+    }
+}
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    for(int i=0;i<n;i++)
+    {
+        cin>>vol[i].name>>vol[i].grade;
+    }
+    quick_sort(0,n-1);
+    bubble_sort(n);
+    int num=0;
+    int tem=int(float(m)*1.5);
+    //cout<<endl<<endl;
+    //cout<<tem<<endl;
+    for(int i=0;i<n;i++)
+    {
+        //cout<<vol[i].name<<" "<<vol[i].grade<<endl;
+        if(vol[tem-1].grade<=vol[i].grade)//从0开始
+            num++;
+    }
+    cout<<vol[tem-1].grade<<" "<<num<<endl;
+    for(int i=0;i<n;i++)
+    {
+        if(vol[tem-1].grade<=vol[i].grade)
+        cout<<vol[i].name<<" "<<vol[i].grade<<endl;
+    }
+}
