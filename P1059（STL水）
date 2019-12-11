@@ -9,7 +9,7 @@ int main()
 {
     int n;
     set<int>se;
-    int a[105]={0};
+    int a[105]={0};//[]内必须由数，不让会RE
     cin>>n;
     for(int i=0;i<n;i++)
     {
