@@ -1,0 +1,33 @@
+//https://www.luogu.com.cn/problem/P1059
+//对stl还不够熟练嗷
+#include<iostream>
+#include<set>
+#include<algorithm>
+
+using namespace std;
+int main()
+{
+    int n;
+    set<int>se;
+    int a[105]={0};
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        int temp;
+        cin>>temp;
+        se.insert(temp);//插入操作
+    }
+    int len=se.size();
+    int i=0;
+    set<int>::iterator it;//se[i]是非法的
+    for(it=se.begin();it!=se.end();it++,i++)
+    {
+        a[i]=*it;
+    }
+    sort(a,a+len);//set容器本身是有序的，不能进行排序
+    cout<<len<<endl;
+    for(i=0;i<len;i++)
+    {
+        cout<<a[i]<<" ";
+    }
+}
