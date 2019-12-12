@@ -1,0 +1,40 @@
+//https://www.luogu.com.cn/problem/P1583 sort函数详解：https://www.cnblogs.com/AlvinZH/p/6784862.html
+//手写快排会tle，憨憨
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+const int MAXN=20005;
+struct fri
+{
+    int name;
+    int w;
+};
+struct fri f[MAXN];
+
+bool cmp(fri a,fri b)//定义cmp函数
+{
+    if(a.w==b.w) return a.name<b.name;//如果权相同，输出编号小的
+    return a.w>b.w;//输出权更大的
+}
+int main()
+{
+    int n,k;
+    int e[11]={0};
+    cin>>n>>k;
+    for(int i=1;i<=10;i++)
+        cin>>e[i];
+    for(int i=0;i<n;i++)
+    {
+        cin>>f[i].w;
+        f[i].name=i+1;
+    }
+    sort(f,f+n,cmp);//使用自定义的cmp
+    for(int i=0;i<n;i++)//排序再二次加权
+    {
+        f[i].w+=e[i%10+1];
+    }
+    sort(f,f+n,cmp);
+    for(int i=0;i<k;i++)//排序输出前K个
+        cout<<f[i].name<<" ";
+}
