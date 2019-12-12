@@ -12,7 +12,7 @@ struct fri
 };
 struct fri f[MAXN];
 
-bool cmp(fri a,fri b)//定义cmp比较函数：排序规则。由于sort暂时没有看源码，所以cmp具体怎么起作用还位置，只能抽象。
+bool cmp(fri a,fri b)//定义cmp比较函数：排序规则。由于sort暂时没有看源码，所以cmp具体怎么起作用还未知，只能抽象。
 {
     if(a.w==b.w) return a.name<b.name;//返回bool值，权相同则按name升序排列
     return a.w>b.w;//返回bool值，按权降序排列
