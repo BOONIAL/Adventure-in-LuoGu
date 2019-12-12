@@ -1,0 +1,116 @@
+//https://www.luogu.com.cn/problem/P1603
+//有6个元素时10^11属实有点大，用unsigned long long
+#include<iostream>
+#include<math.h>
+#include<string>
+#include<sstream>
+#include<algorithm>
+
+using namespace std;
+const int MAXN=800;
+unsigned long long ans[MAXN]={0};
+int a[10][100]={0};
+unsigned long long sum=0,num=0;
+
+string former[]={"zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"};
+string informer[]={"a","both","another","first","second","third"};
+unsigned long long my_pow(int k)
+{
+    unsigned long long goal=1;
+    for(int i=0;i<k;i++)
+        goal*=10;
+    return goal;
+}
+void find_ans(int k,int n,unsigned long long sum)//k:指数，n:元素个数，sum:和
+{
+    unsigned long long temp;
+    if(k==2*n)
+    {
+        ans[num++]=sum;
+        //cout<<sum<<endl;
+    }
+    for(int i=0;i<n;i++)//排列组合
+    {
+        if(a[i][0]>=0)
+        {
+            temp=a[i][0]*my_pow(k+1)+a[i][1]*my_pow(k);
+            a[i][0]-=MAXN;//标记子树不能再使用的量
+            find_ans(k+2,n,sum+temp);//递归求解,sum+temp保证父节点的不变
+            a[i][0]+=MAXN;
+        }
+    }
+
+}
+
+int main()
+{
+    string s,tem;
+    getline(cin,s);
+    stringstream ss(s);
+    int con=0;
+    int flag=0;
+    while(ss>>tem)
+    {
+        for(int i=0;i<20;i++)
+        {
+            if(tem==former[i])
+                {
+                    flag=1;
+                    if((i*i)%100>9)
+                    {
+                        a[con][0]=((i*i)%100)/10;
+                        a[con][1]=((i*i)%100)%10;
+                        con++;
+                        //cout<<a[con-1][0]<<" "<<a[con-1][1]<<endl;
+                    }
+                    else
+                    {
+                        a[con++][1]=((i*i)%100)%10;
+                        //cout<<a[con-1][0]<<" "<<a[con-1][1]<<endl;
+                    }
+
+                }
+        }
+        //非正式的太特别了，只好全用if
+        if(tem==informer[0])
+        {
+            flag=1;
+            a[con++][1]=1;
+            //cout<<tem;
+        }
+        if(tem==informer[1])
+        {
+            flag=1;
+            a[con++][1]=4;
+            //cout<<tem;
+        }
+        if(tem==informer[2])
+        {
+            flag=1;
+            a[con++][1]=4;
+            //cout<<tem;
+        }
+        if(tem==informer[3])
+        {
+            flag=1;
+            a[con++][1]=1;
+            //cout<<tem;
+        }
+        if(tem==informer[4])
+        {
+            flag=1;
+            a[con++][1]=4;
+            //cout<<tem;
+        }
+        if(tem==informer[5])
+        {
+            flag=1;
+            a[con++][1]=9;
+            //cout<<tem;
+        }
+    }
+    //cout<<con;
+    find_ans(0,con,0);
+    sort(ans,ans+num);
+    cout<<ans[0];
+}
