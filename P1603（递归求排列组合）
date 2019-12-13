@@ -117,7 +117,7 @@ int main()
     cout<<ans[0];
 }
 
-//贪心版
+//贪心版（题解）
 #include<iostream>
 #include<cstdio>
 #include<cstring>
