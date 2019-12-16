@@ -1,0 +1,105 @@
+//https://www.luogu.com.cn/problem/P1071
+//用复杂的方法前先考虑用简单的方法是否可以在相同操作难度达到同一效果。
+#include<iostream>
+#include<sstream>
+#include<string>
+
+using namespace std;
+string alp,code;
+void read_in_alp()
+{
+    string temp;
+    getline(cin,temp);
+    stringstream ss(temp);
+    while(ss>>alp);
+}
+void read_in_code()
+{
+    string temp;
+    getline(cin,temp);
+    stringstream ss(temp);
+    while(ss>>code);
+}
+int process()
+{
+    int flag=1;
+    int len=alp.size();
+    for(int i=0;i<len;i++)//确保一一对应
+    {
+        for(int j=0;j<len;j++)
+        {
+            if(code[i]==code[j])
+            {
+                if(alp[i]!=alp[j])
+                {
+                    flag=0;
+                    break;
+                }
+            }
+        }
+    }
+    for(int i=0;i<len;i++)//确保一一对应
+    {
+        for(int j=0;j<len;j++)
+        {
+            if(alp[i]==alp[j])
+            {
+                if(code[i]!=code[j])
+                {
+                    flag=0;
+                    break;
+                }
+            }
+        }
+    }
+    for(int i=0;i<len;i++)//按题设要求
+    {
+        int cnt=0;
+        for(int j=0;j<len;j++)
+        {
+            if(code[i]!=alp[j])
+                cnt++;
+        }
+        if(cnt==len)
+        {
+            flag=0;
+            break;
+        }
+    }
+    return flag;
+}
+int main()
+{
+    string tar;
+    char ans[105]={0};
+    int flag=1;
+    read_in_code();
+    read_in_alp();
+    cin>>tar;
+    //cout<<endl<<alp<<endl<<code<<endl<<tar<<endl;
+    if(!process()||tar==code)//如果tar和code相同，没必要翻译。
+    {
+        cout<<"Failed";
+    }
+    else
+    {
+        for(int i=0;i<tar.size();i++)
+        {
+            flag=0;
+            for(int j=0;j<code.size();j++)
+            {
+                if(tar[i]==code[j])
+                    {
+                        flag=1;
+                        ans[i]=alp[j];
+                        break;
+                    }
+
+            }
+        }
+        if(flag)
+            cout<<ans;
+        else
+            cout<<"Failed";
+    }
+}
