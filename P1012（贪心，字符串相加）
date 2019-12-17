@@ -1,0 +1,24 @@
+//https://www.luogu.com.cn/problem/P1012
+//贪心思路：两两比较，从第一个数开始，使s[i]s[j]>s[j]s[i]达到最优解
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+string s[25];//字符串数组
+int main()
+{
+    int n,len;
+    cin>>n;
+    for(int i=0;i<n;i++)
+        cin>>s[i];
+    for(int i=0;i<n;i++)
+    {
+        for(int j=i+1;j<n;j++)
+        {
+            if(s[i]+s[j]<s[j]+s[i])//字符串可以直接相加。贪心要达到的目的使排列的数最大，那么从开头两个数的组合就要最大。
+                swap(s[i],s[j]);
+        }
+    }
+    for(int i=0;i<n;i++)
+        cout<<s[i];
+}
