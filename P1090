@@ -1,0 +1,18 @@
+//https://www.luogu.com.cn/problem/P1090
+//用优先队列解决。贪心：保证合并的两个元素是最小的
+#include<bits/stdc++.h>
+using namespace std;
+int n,x,ans;
+priority_queue<int,vector<int>,greater<int> >q;//优先队列
+int main(){
+    cin>>n;
+    for(int i=1;i<=n;i++) cin>>x,q.push(x);//进入优先队列
+    while(q.size()>=2){
+        int a=q.top(); q.pop();//栈顶元素最小
+        int b=q.top(); q.pop();
+        ans+=a+b;
+        q.push(a+b);//做新元素
+    }
+    cout<<ans<<endl;
+    return 0;
+}
