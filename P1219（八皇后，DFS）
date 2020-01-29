@@ -1,0 +1,36 @@
+//https://www.luogu.com.cn/problem/P1219
+//八皇后问题（DFS），用二维数组模拟棋盘不好处理，用数组表示对角线等的状态更好处理（mlgb）。
+#include<bits/stdc++.h>
+using namespace std;
+int ans[14],check[3][28]={0},sum=0,n;
+void eq(int line)//line：第line行
+{
+    if(line>n)
+    {
+        sum++;
+        if(sum>3) return;
+        else
+        {
+            for(int i=1;i<=n;i++) printf("%d ",ans[i]);
+            printf("\n");
+            return;
+        }
+    }
+    for(int i=1;i<=n;i++)//第i列
+    {
+        if((!check[0][i])&&(!check[1][line+i])&&(!check[2][line-i+n]))//line+i：表示从右上到左下的对角线，值表示对角线上有多少个位置，保证了对角线的唯一性。line-i+n：表示从左上到右下的对角线
+        {
+            ans[line]=i;
+            check[0][i]=1; check[1][line+i]=1; check[2][line-i+n]=1;
+            eq(line+1);
+            check[0][i]=0; check[1][line+i]=0; check[2][line-i+n]=0;
+        }
+    }
+}
+int main()
+{
+    scanf("%d",&n);
+    eq(1);
+    printf("%d",sum);
+    return 0;
+}
