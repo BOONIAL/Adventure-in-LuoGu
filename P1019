@@ -1,0 +1,77 @@
+//https://www.luogu.com.cn/problem/P1019，单词接龙
+//DFS题，回溯搜索，与八皇后类似
+#include<bits/stdc++.h>
+
+using namespace std;
+const int maxn=25;
+string store[maxn];//字符数组，储存单词
+int cacu[maxn]={0};//计使用次数
+char head;//首字母
+int num,maxlen=0;
+int judge(string a,string b)//a：尾字符串，b：待接字符串，判定b能不能加入龙尾。返回最小相同的长度
+{
+    int lena=a.length();
+    int lenb=b.length();
+    int len=0;
+    for(int i=1;i<=lena&&i<=lenb;i++)//可以算到包含的情况,i代表截取的字符数
+    {
+        string c=a.substr(lena-i,i);
+        string d=b.substr(0,i);
+        if(c.compare(d)==0)//比较函数，题目意思是相似了就可以了
+        {
+            len=i; 
+            break;
+        }     
+    }
+    if((len==lena||len==lenb))
+        return 0;//包含关系
+    else
+        return len;
+}
+void dfs(int len,string tail)//len:龙的长度，tail尾字符串
+{
+    //cout<<tail<<endl;
+    if(len==0)
+    {
+        for(int i=0;i<num;i++)
+        {
+            if(store[i][0]==head)
+            {
+                cacu[i]+=1;
+                len+=store[i].length();
+                dfs(len,store[i]);
+                cacu[i]-=1;//回溯状态
+                len-=store[i].length();
+            }
+        }
+    }
+    else
+    {
+        int times=0;
+        for(int i=0;i<num;i++)
+        {
+            //cout<<endl<<tail<<endl<<store[i]<<endl<<judge(tail,store[i])<<endl;
+            if(cacu[i]<2&&judge(tail,store[i])>0)
+            {
+                times++;
+                cacu[i]+=1;
+                len+=(store[i].length()-judge(tail,store[i]));
+                dfs(len,store[i]);
+                cacu[i]-=1;
+                len-=(store[i].length()-judge(tail,store[i]));
+            }
+        }
+        if(!times)
+            maxlen=max(maxlen,len);    
+    }
+    
+}
+int main()
+{
+    cin>>num;
+    for(int i=0;i<num;i++)
+        cin>>store[i];
+    cin>>head;
+    dfs(0,"abc");
+    cout<<maxlen;
+}
