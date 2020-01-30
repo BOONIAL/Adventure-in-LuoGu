@@ -1,0 +1,42 @@
+//https://www.luogu.com.cn/problem/P1605
+//简单DFS，记住起点也是要封的，不然回溯会出问题
+#include<bits/stdc++.h>
+
+using namespace std;
+int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};//四向搜索
+int sx,sy,fx,fy,m,n,t,tx,ty,ans=0;
+
+void dfs(int curx,int cury,int maze[10][10])
+{
+    if(curx==fx&&cury==fy)
+        ans++;
+    else
+    {
+        for(int i=0;i<4;i++)
+        {
+            int tempx=curx+dir[i][0];
+            int tempy=cury+dir[i][1];
+            if(tempx>=1 && tempx<=n && tempy>=1 && tempy<=m && !maze[tempx][tempy])//能走
+            {
+                maze[tempx][tempy]=1;
+                dfs(tempx,tempy,maze);
+                maze[tempx][tempy]=0;
+            }
+        }
+    }
+}
+
+int main()
+{
+    int maze[10][10]={0};//迷宫，0表示可以走，1表示不能走
+    cin>>n>>m>>t>>sx>>sy>>fx>>fy;
+    for(int i=0;i<t;i++)
+    {
+        cin>>tx>>ty;
+        maze[tx][ty]=1;
+    }
+    maze[sx][sy]=1;
+    dfs(sx,sy,maze);
+    cout<<ans;
+}
+
