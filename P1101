@@ -1,0 +1,82 @@
+//https://www.luogu.com.cn/problem/P1101
+//DFS情况比较多但处理比较简单，在第2个元素八向搜索，剩下的方向就定好了。
+#include<bits/stdc++.h>
+
+using namespace std;
+const int maxn=100+10;
+string store[maxn];//储存字符串
+string target="yizhong";
+int pos[maxn][maxn]={0};//标记不可替代的位置
+int dir[8][2]={{0,1},{-1,1},{-1,0},{-1,-1},{0,-1},{1,-1},{1,0},{1,1}};
+int n;
+
+void dfs(int num,int x,int y,int pre_pos[maxn][maxn],int dirx,int diry)//num：要找的元素位置。x,y：传入的符合元素中尾元素位置。数组：之前符合条件的元素的位置,1表示有机会被标记，0表示没有机会。
+{
+    if(num==0)
+    {
+        for(int i=0;i<n;i++)
+            for(int j=0;j<n;j++)
+            {
+                 if(store[i][j]==target[num])
+                    pre_pos[i][j]=1;
+                    dfs(num+1,i,j,pre_pos,0,0);
+                    pre_pos[i][j]=0;
+            }
+               
+    }
+    else if(num==1)
+    {
+        for(int i=0;i<8;i++)//八向搜索
+            {
+                dirx=dir[i][0];
+                diry=dir[i][1];
+                if(x+dirx<n && x+dirx>=0 && y+diry<n && y+diry>=0 && store[x+dirx][y+diry]==target[num])
+                {
+                    pre_pos[x+dirx][y+diry]=1;
+                    dfs(num+1,x+dirx,y+diry,pre_pos,dirx,diry);
+                    pre_pos[x+dirx][y+diry]=0;
+                }   
+            }
+    }
+    else if(num<target.length())
+    {
+        if(x+dirx<n && x+dirx>=0 && y+diry<n && y+diry>=0 && store[x+dirx][y+diry]==target[num])
+        {
+            pre_pos[x+dirx][y+diry]=1;
+            dfs(num+1,x+dirx,y+diry,pre_pos,dirx,diry);
+            pre_pos[x+dirx][y+diry]=0;
+        }
+    }
+    else//标记
+    {
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+                if(pre_pos[i][j]==1)
+                    pos[i][j]=1;
+        }         
+    }
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;i++)
+        cin>>store[i];
+    int pre_pos[maxn][maxn]={0};
+    dfs(0,0,0,pre_pos,0,0);
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(pos[i][j]==1)
+                cout<<store[i][j];
+            else
+            {
+                cout<<"*";
+            }
+        }
+        cout<<endl;
+    }
+        
+}
