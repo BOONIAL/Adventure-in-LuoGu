@@ -1,5 +1,6 @@
 //https://www.luogu.com.cn/problem/P1219
 //八皇后问题（DFS），用二维数组模拟棋盘不好处理，用数组表示对角线等的状态更好处理（mlgb）。
+//DFS需要的数据结构是栈。
 #include<bits/stdc++.h>
 using namespace std;
 int ans[14],check[3][28]={0},sum=0,n;
