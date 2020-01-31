@@ -1,0 +1,103 @@
+//https://www.luogu.com.cn/problem/P1162
+//BFS需要数据结构队列，不需要递归所以不用栈
+#include<bits/stdc++.h>
+
+using namespace std;
+const int maxn=30+5;
+int n;
+int maze[maxn][maxn];
+struct  pos//储存位置
+{
+    int r;
+    int c;
+};
+
+
+void bfs()
+{
+    int dir[4][2]={{1,0},{-1,0},{0,1},{0,-1}};//四向
+    for(int i=1;i<n-1;i++)//找未在边界的0进行搜索
+    {
+        for(int j=1;j<n-1;j++)
+        {
+            if(!maze[i][j])
+            {
+                bool visit[maxn][maxn]={0};//0：表示该点未访问，1：表示已访问，每次从root出发时都要重置，否则下次的root会出现问题
+                queue<struct pos>que;//队列
+                int pmaze[maxn][maxn]={0};//储存待定的染色位置,0表示不能染色，1表示可以染色
+
+                bool poss=1;//染色组的可能性
+                visit[i][j]=1;//已访问
+                pmaze[i][j]=1;//加入待定
+
+                struct pos p;
+                p.r=i;
+                p.c=j;
+                que.push(p);//入队
+
+                while(!que.empty())
+                {
+                    struct pos temp;
+                    temp=que.front();
+                    int tr=temp.r;
+                    int tc=temp.c;
+                    que.pop();
+                    for(int k=0;k<4;k++)
+                    {
+                        tr+=dir[k][0];
+                        tc+=dir[k][1];
+                        if(tc<n && tc>=0 && tr>=0 && tr<n && !maze[tr][tc] && !visit[tr][tc])//只访问未访问的0元素
+                        {
+                            if(tc==n-1 || tr==0 || tc==0 || tr==n-1)//触碰边界的0元素
+                            {
+                                visit[tc][tr]=1;
+                                poss=0;
+                            }
+                            else
+                            {
+                                struct pos tem;
+                                tem.r=tr;
+                                tem.c=tc;
+                                que.push(tem);
+                                pmaze[tr][tc]=1;
+                                visit[tr][tc]=1;
+                            } 
+                        }
+                        tr-=dir[k][0];
+                        tc-=dir[k][1];  
+                    }
+                    if(!poss)
+                        break;
+                }
+
+                if(poss)
+                {
+                    for(int i=0;i<n;i++)
+                    {
+                        for(int j=0;j<n;j++)
+                        {
+                            if(pmaze[i][j])
+                                maze[i][j]=2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+            cin>>maze[i][j];
+    bfs();
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+            cout<<maze[i][j]<<" ";
+        cout<<endl;
+    }
+        
+}
