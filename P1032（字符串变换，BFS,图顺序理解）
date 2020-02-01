@@ -1,0 +1,98 @@
+//https://www.luogu.com.cn/problem/P1032
+//BFS注意不能回溯，不能重复。
+//BFS找到的第一个解是“最短”解，如果是求最优解，找到第一个解后停止BFS即可。
+#include<bits/stdc++.h>
+
+using namespace std;
+struct rule{//储存规则
+    string sa;
+    string sb;
+};
+struct preplan{//储存队列
+        string s;
+        int times;
+};
+struct rule re[10];//储存规则
+string A,B;
+int n=0,mina=100;
+
+void bfs()
+{
+    bool fin=false;//是否找到解
+    map<string,int>ma;//防止之前出现的字符串再次出现
+    queue<struct preplan>que;
+    struct preplan pplan;
+    pplan.s=A;
+    pplan.times=0;
+    que.push(pplan);
+    ma.insert(pair<string, int>(A,1));
+    while(!que.empty()&&que.front().times<=10&&!fin)//此bfs的层由步数决定，进行了几步就是第几层
+    {
+        struct preplan temp=que.front();//即将弹出的数组
+        que.pop();
+        int len=temp.s.length();
+        if(temp.s==B&&temp.times<=10)//结果是按层序出的，第一个出来的结果一定是最短的路径，这也是bfs中队列的特性
+        {
+            mina=temp.times;
+            break;
+        }
+        else if(temp.s!=B&&temp.times<=10)
+            for(int j=0;j<n;j++)//遍历规则
+            {
+                if(!fin)//找到解立马停止循环
+                for(int i=1;i<=len;i++)//遍历组合,i为长度
+                {
+                    if(!fin)
+                    for(int pos=0;pos<len;pos++)//位置
+                        {
+                            if(pos+i<=len)
+                            {
+                                string t=temp.s.substr(pos,i);//字符串的子串
+                                if(re[j].sa==t)
+                                    {
+                                        struct preplan tem;
+                                        if(temp.s==t)//全部被取代
+                                            tem.s=re[j].sb;
+                                        else if(pos==0)//开头被取代
+                                            tem.s=re[j].sb+temp.s.substr(pos+i);
+                                        else if(pos+i==len)//末尾被取代
+                                            tem.s=temp.s.substr(0,pos)+re[j].sb;
+                                        else //被取代的段落在中间
+                                            tem.s=temp.s.substr(0,pos)+re[j].sb+temp.s.substr(pos+i);
+
+                                        if(tem.s!=B && !ma.count(tem.s))//不能把之前出现过的字符串加入队列，这样无意义
+                                        {
+                                            ma.insert(pair<string, int>(tem.s,1));                                       
+                                            tem.times=temp.times+1;//步数代表层数
+                                            que.push(tem);
+                                        }
+                                        else if(tem.s==B)
+                                        {
+                                            mina=temp.times+1;
+                                            fin=1;//停止bfs中的循环
+                                            break;//停止循环
+                                        }                                    
+                                    }
+                            }
+                        }
+                }
+            }
+    }
+}
+
+int main()
+{
+    cin>>A>>B;
+    string a,b;
+    while(cin>>a>>b)
+        {
+            re[n].sa=a;
+            re[n].sb=b;
+            n++;
+        }
+    bfs();
+    if(mina>10||mina==0)
+        cout<<"NO ANSWER!";
+    else
+        cout<<mina;
+}
