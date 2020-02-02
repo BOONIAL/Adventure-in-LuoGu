@@ -1,0 +1,69 @@
+//https://www.luogu.com.cn/problem/P1141
+//BFS剪枝，状态禁止回溯
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=1000+10;
+int maze[maxn][maxn];
+int ans[100000+10];//储存联通图的答案，联通图的意思是在一个解中的任意一个节点答案都和其他节点相同（因为这个图是多向的）
+int visit[maxn][maxn]={0};//0代表未访问，其他值表示该点处于第几个联通图中。被访问过的点都是可以不用再bfs，因为这种图是联通起来的（四通八达）
+int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};//四向
+int n,m,amo=0;
+struct msg{//记录队列信息
+    int x;//坐标
+    int y;
+};
+
+int bfs (int x,int y)
+{
+    amo++;
+    queue<struct msg>que;
+    struct msg fir;
+    int maxp=1;//最大格子数
+    fir.x=x;
+    fir.y=y;
+    visit[x][y]=amo;
+    que.push(fir);
+    while(!que.empty())
+    {
+        struct msg temp=que.front();
+        que.pop();
+        for(int i=0;i<4;i++)
+        {
+            int nx=temp.x+dir[i][0];
+            int ny=temp.y+dir[i][1];
+            if(nx>0 && nx<=n && ny>0 && ny<=n && maze[temp.x][temp.y]!=maze[nx][ny] && !visit[nx][ny])
+            {
+                struct msg q;
+                q.x=nx;
+                q.y=ny;
+                maxp+=1;
+                visit[nx][ny]=amo;
+                que.push(q);
+            }
+        }
+    }
+    ans[amo]=maxp;//第amo个联通图的答案
+    return maxp;
+}
+
+int main()
+{
+    cin>>n>>m;
+    int r,c=0;
+    for(int i=1;i<=n;i++)
+    {
+        string t;
+        cin>>t;
+        for(int j=1;j<=t.length();j++)
+            maze[i][j]=t[j-1]-'0';
+    }
+    for(int i=1;i<=m;i++)
+    {
+        int tempx,tempy;
+        cin>>tempx>>tempy;
+        if(!visit[tempx][tempy])//如果没有就进行BFS
+            cout<<bfs(tempx,tempy)<<endl;
+        else//如果有就不再搜索
+            cout<<ans[visit[tempx][tempy]]<<endl;
+    }    
+}
