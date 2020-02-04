@@ -1,0 +1,48 @@
+//https://www.luogu.com.cn/problem/P1118
+//技巧性DFS，涉及组合数
+#include<bits/stdc++.h>
+
+using namespace std;
+int n,sum;
+int ans[25];//答案
+int C[25];//储存组合数
+bool visit[25]={0};//0表示未访问，1表示已访问
+
+int dfs(int i,int num,int v)//i：有i个数，num：第i个待选数num，v：i个数的和
+{
+    if(v>sum)//剪枝
+        return 0;
+    if(i==n)
+    {
+        if(v==sum)
+        {
+            ans[i]=num;
+            return 1;
+        }  
+        else
+            return 0;
+    }
+    visit[num]=1;//封锁
+    for(int j=1;j<=n;j++)//遍历可能解
+    {
+        if(!visit[j]&&dfs(i+1,j,C[i]*j+v))//递归可行再写入参数为答案
+        {
+            ans[i]=num;
+            return 1;
+        }
+    }
+    visit[num]=0;//复位
+    return 0;
+}
+
+int main()
+{
+    cin>>n>>sum;
+    C[0]=C[n-1]=1;
+    if(n!=1)
+        for(int k=1;k<=n/2;k++)
+            C[k]=C[n-k-1]=(n-k)*C[k-1]/k;//计算组合数
+    if(dfs(0,0,0))//有解才输出
+        for(int k=1;k<=n;k++)
+            cout<<ans[k]<<" ";
+}
