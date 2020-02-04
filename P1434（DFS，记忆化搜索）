@@ -1,0 +1,52 @@
+//https://www.luogu.com.cn/problem/P1434
+//DFS记忆化搜索，让搜索更高效，节省时间
+#include<bits/stdc++.h>
+
+using namespace std;
+const int maxn=100+10;
+int r,c,ans=1;
+int maze[maxn][maxn];//储存场地信息
+int sans[maxn][maxn];//储存该点的最优解，实现记忆化搜索
+int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};//四向
+
+void dfs(int x,int y,int att,int sx,int sy)//x,y当前坐标。att目前所走过的点数量。sx，sy起点坐标。
+{
+    int flag=0;
+    for(int i=0;i<4;i++)
+    {
+        int tx=x+dir[i][0];
+        int ty=y+dir[i][1];
+        if(tx<r && tx>=0 && ty<c && ty>=0 && maze[x][y]>maze[tx][ty])
+        {
+            if(sans[tx][ty]>1)//找到的下一个点如果存在最优解则不必再dfs，直接加成
+            {
+                ans=max(att+sans[tx][ty],ans);
+                sans[sx][sy]=max(att+sans[tx][ty],sans[sx][sy]);//更新sx，sy点的最优解
+            }
+            else
+            {
+                flag=1;
+                ans=max(ans,att+1);
+                dfs(tx,ty,att+1,sx,sy);
+            }
+        }
+    }
+    if(!flag)//在无路可走时更新最优解
+    {
+        ans=max(ans,att);
+        sans[sx][sy]=max(att,sans[sx][sy]);//更新最优解
+    }   
+}
+
+int main()
+{
+    fill(sans[0],sans[0]+maxn*maxn,1);
+    cin>>r>>c;
+    for(int i=0;i<r;i++)
+        for(int j=0;j<c;j++)
+            cin>>maze[i][j];
+    for(int i=0;i<r;i++)
+        for(int j=0;j<c;j++)
+            dfs(i,j,1,i,j);
+    cout<<ans;
+}
