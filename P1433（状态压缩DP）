@@ -1,0 +1,61 @@
+//https://www.luogu.com.cn/problem/P1433
+//状态压缩DP，用0或者1表示节点状态。动态规划。
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX = 17;
+const int INF = 0x3fffffff;
+
+double dp[1<<MAX][MAX];        // i 集合，以 j 为起始点，最短的路径 
+double r[MAX], c[MAX], len[MAX][MAX];
+int n;
+
+int main(){
+//    freopen("input.txt", "r", stdin);
+    
+    scanf("%d", &n);
+    r[0] = c[0] = 0;
+    for(int i=1; i<=n; i++){
+        scanf("%lf%lf", &r[i], &c[i]);
+    }
+    
+    //求出两点之间的长度
+    for(int i=0; i<=n; i++){
+        for(int j=0; j<=n; j++){
+            double x1 = r[i], y1 = c[i];
+            double x2 = r[j], y2 = c[j];
+            len[i][j] = sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+        }
+    }
+    
+    double ans = 999999999;
+    //DP
+    //初始化 
+    for(int i=0; i<(1<<MAX); i++)
+        for(int j=0; j<MAX; j++)
+            dp[i][j] = 999999999;
+    for(int i=0; i<=n; i++)        //只有一个结点时，最短路径为 0
+        dp[(1<<i)][i] = 0; 
+    
+    for(int i=1; i<=((1<<(n+1))-1); i++){        //枚举集合 i 。dp问题要分解成子问题，枚举的意义在此。
+        for(int j=0; j<=n; j++){//遍历节点
+            int t = (1<<j);
+            if((t & i) > 0){            //如果 i 结合有第 j 个结点 
+                int k = i - t;            //k 集合等于 i 集合去掉 j 结点（在二进制数中的表现）
+//                if(i == 3){
+//                    cout << k << endl;
+//                }
+                for(int x=0; x<=n; x++){
+                    t = (1<<x);
+                    if((t & k) > 0){    //如果 k 集合里有第 x 个结点（二进制1表示）
+                        //dp[k][x] + len[x][j] ： 从 j 点出发到 x 点的距离再加上从 x 出发走完 k 集合的最短距离 
+                        dp[i][j] = min(dp[i][j], dp[k][x] + len[j][x]);
+                    }
+                } 
+            }
+        }
+    }
+    ans = dp[((1<<(n+1))-1)][0];
+    printf("%.2lf", ans);
+    return 0;
+}
