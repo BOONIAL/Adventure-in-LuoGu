@@ -5,7 +5,7 @@
 
 using namespace std;
 long long b,p,k;
-long long cal(long long a,long long b){//a^b。快速幂：将b用二进制的形式表示，然后拆分a^b
+long long cal(long long a,long long b){//a^b。快速幂：将b用二进制的形式表示，然后拆分a^b。快速幂的速度为logN，一般求法为N
     long long ans=1,base=a;
     while(b){
         if(b&1!=0){
