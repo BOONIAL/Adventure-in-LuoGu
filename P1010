@@ -1,0 +1,21 @@
+//分治的基本操作：递归
+//https://www.luogu.com.cn/problem/P1010
+#include<bits/stdc++.h>
+using namespace std;
+string ans(int x){//x：十进制待解数
+    int i=0;//
+    string s="";
+    if(!x) 
+        return "0";
+    do 
+    if(x&1) 
+        s=(i==1?"2":"2("+ans(i)+")")+(s==""?"":"+")+s;//递归，从低位开始接。i代表二进制中第i位。
+    while(++i,x>>=1);//每次向右位移
+    return s;
+}
+
+int main(){
+    int n;
+    cin>>n;
+    cout<<ans(n);
+}
