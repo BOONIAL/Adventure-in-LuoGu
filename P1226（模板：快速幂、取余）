@@ -1,0 +1,26 @@
+//https://www.luogu.com.cn/problem/P1226
+//快速幂和取余的模板
+//https://www.cnblogs.com/CXCXCXC/p/4641812.html快速幂
+#include<bits/stdc++.h>
+
+using namespace std;
+long long b,p,k;
+long long cal(long long a,long long b){//a^b。快速幂：将b用二进制的形式表示，然后拆分a^b
+    long long ans=1,base=a;
+    while(b){
+        if(b&1!=0){
+            ans*=base;
+            ans%=k;//(A+B) mod b=(A mod b + B mod b) mod b //(A×B) mod b = ((A mod b) × (B mod b)) mod b,取余运算的性质
+        }
+        base*=base;//a^2、a^4、a^8如此增长。以2^n的方式增长
+        base%=k;
+        b>>=1;//二进制去掉最后一位
+    }
+    return ans;
+}
+
+int main(){
+    cin>>b>>p>>k;
+    //cout<<cal(b,p)<<endl;
+    printf("%lld^%lld mod %lld=%lld",b,p,k,cal(b,p)%k);
+}
