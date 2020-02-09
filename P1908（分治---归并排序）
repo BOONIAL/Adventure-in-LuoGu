@@ -1,0 +1,47 @@
+//https://www.luogu.com.cn/problem/P1908
+//归并排序
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=500000+10;
+long long int ans,n,a[maxn];
+long long int L[maxn],R[maxn];//左右数组
+void merge(int l,int mid,int r){//l:子数组的左方，也是数组第l个元素的位置
+    int n1=mid-l+1;//左数组的大小
+    int n2=r-mid;
+    int i,j,k;
+    for(i=1;i<=n1;i++)
+        L[i]=a[l+i-1];//i从1开始，将a数组元素写入L
+    for(j=1;j<=n2;j++)
+        R[j]=a[mid+j];
+    L[n1+1]=R[n2+1]=1000000000+5;//边界
+    
+    i=j=1;
+    for(k=l;k<=r;k++){
+        if(L[i]<=R[j]){//比较
+            a[k]=L[i];//排序
+            i++;
+        }
+        else{
+            a[k]=R[j];//排序
+            if(j!=n2+1&&i!=n1+1)
+                ans+=(n1-i+1);//L、R都是有序的，所以L[i]后面的数都比R[j]大。而且归并的方法不会再回顾R[j]，所以一次性加上
+            j++;
+        }
+    }
+}
+void merge_sort(int l,int r){//l,r：代表在a数组得位置，同时是子数组的两端
+    if(l<r){
+        int mid=(l+r)/2;
+        merge_sort(l,mid);//分治
+        merge_sort(mid+1,r);
+        merge(l,mid,r);//结果合并
+    }
+}
+
+int main(){
+    cin>>n;
+    for(int i=0;i<n;i++)
+        cin>>a[i];
+    merge_sort(0,n-1);
+    cout<<ans;
+}
