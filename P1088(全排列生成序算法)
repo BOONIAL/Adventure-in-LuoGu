@@ -1,0 +1,41 @@
+//https://www.luogu.com.cn/problem/P1088
+//全排列生成序算法
+#include<bits/stdc++.h>
+using namespace std;
+
+int m,n,temp,ts;
+vector <int> ve(10000+10);
+void nper(){//手写next_permutation，前缀+后缀
+    int p=n-1;
+    for(int i=n-1;i>0;i--){//p:寻找降序列头的位置
+        if(ve[i-1]<ve[i])
+            break;
+        else
+            p--;
+    }
+    if(!p)//全部降序
+        return ;
+    else{
+        p--;//降序列头前的位置
+        for(int i=n-1;i>p;i--)
+            if(ve[p]<ve[i]){//找到比头前稍大的元素，制造新前缀
+                swap(ve[p],ve[i]);
+                break;
+            }
+        reverse(ve.begin()+p+1,ve.begin()+n);//倒置ve[p]后的降序列为升序列，制造最小后缀。reverse作用范围是：[)左开右闭区间
+        return;
+    }
+}
+
+int main(){
+    cin>>n>>m;
+    for(int i=0;i<n;i++)
+        cin>>ve[i];
+    for(int i=0;i<m;i++)
+        nper();
+    for(int i=0;i<n;i++)
+        if(i<n-1)
+            cout<<ve[i]<<" ";
+        else
+            cout<<ve[i]<<endl;
+}
