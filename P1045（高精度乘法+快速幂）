@@ -1,0 +1,52 @@
+//https://www.luogu.com.cn/problem/P1045
+//快速幂+高精度乘法
+//高精度乘法：模拟人手算的过程，可以在计算机表示更高精度。
+//光用高精度只能解决精度不够的问题，复杂度最小也是O(n^2)（高精乘单精的情况）。所以利用高精度算法的特性，只计算500位的数字，加上快速幂，时间复杂度为O(logn)。
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxn=1000+50;
+int a[maxn],b[maxn],t[maxn],p;
+void multi(){//高精乘法
+    int i,k;
+    memset(t,0,sizeof(t));
+    for(i=1;i<=500;i++)//每一位先乘
+        for(k=1;k<=500;k++)
+            t[i+k-1]+=a[i]*b[k];
+    for(i=1;i<=500;i++){//进位
+        t[i+1]+=t[i]/10;
+        t[i]=t[i]%10;
+    }
+    memcpy(a,t,sizeof(a));//把t值赋给a
+}
+
+void mul(){//2^n的高精乘法
+    int i,k;
+    memset(t,0,sizeof(t));
+    for(i=1;i<=500;i++)//每一位先乘
+        for(k=1;k<=500;k++)
+            t[i+k-1]+=b[i]*b[k];
+    for(i=1;i<=500;i++){//进位
+        t[i+1]+=t[i]/10;
+        t[i]=t[i]%10;
+    }
+    memcpy(b,t,sizeof(b));//把t值赋给b
+}
+int main(){
+    cin>>p;
+    cout<<int(log10(2)*p+1)<<endl;
+    a[1]=1,b[1]=2;//初始化
+    while(p!=0){//快速幂模板
+        if(p&1!=0)
+            multi();
+        mul();
+        p>>=1;
+    }
+    a[1]-=1;
+    int cur=500;//从高位开始输出
+    for(int i=1;i<=10;i++){
+        for(int j=1;j<=50;j++)
+            cout<<a[cur--];
+        cout<<endl;
+    }
+}
