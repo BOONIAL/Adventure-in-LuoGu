@@ -1,0 +1,16 @@
+//https://www.luogu.com.cn/problemnew/solution/P1403题解
+//https://www.luogu.com.cn/problem/P1403
+//打表不行，数据太大。
+#include<bits/stdc++.h>
+using namespace std;
+
+using namespace std;
+int n,sum;
+int main()
+{
+    cin>>n;
+    for(int k=1;k<=n;k++)
+        sum+=n/k;
+    cout<<sum<<endl;
+    return 0;
+}
