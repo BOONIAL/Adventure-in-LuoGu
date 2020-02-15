@@ -1,0 +1,26 @@
+//https://www.luogu.com.cn/problem/P1192
+//斐波那契数列：https://baike.baidu.com/item/%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/99145#3_3
+//线性递推（归纳法）
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxn=100000+5;
+long long ans[maxn],n,k;
+
+int main (){
+    cin>>n>>k;
+    ans[1]=1;
+    for(int i=2;i<=n;i++){
+        if(i<=k){//当i小于k时，答案是前面所有项的和
+            for(int j=1;j<i;j++)
+                ans[i]+=ans[j];
+            ans[i]++;
+        }
+        else{//当i大于k时，答案是i项前面k个项的和
+            for(int j=i-k;j<i;j++)
+                ans[i]+=ans[j];
+        }
+        ans[i]=ans[i]%100003;//取余的性质(A+B) mod C = (A mod C + B mod C) mod C
+    }
+    cout<<ans[n];
+}
