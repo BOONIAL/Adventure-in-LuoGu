@@ -1,0 +1,29 @@
+//https://www.luogu.com.cn/problem/P1025
+//递推，剪枝。
+#include<bits/stdc++.h>
+using namespace std;
+
+long long  ans,n,k;
+void fun(int cur,int num,int con){//cur:当前尾部元素。num：当前数值。con：当前元素个数
+    if(con==k){
+        if(num==0){
+            ans++;
+        }
+        return;
+    }
+    else{
+        for(int i=cur;i<n-k+2;i++){//递归,后一个元素不能小于前一个元素
+            if((num-i>=i && con+1!=k)||(con+1==k && num-i>=0)){//剪枝：除了最后一个点外，后面可以用的数必须大于尾部元素（防止重叠）。最后一个点也要有规则，至于为什么num-i不直接==0，可以用7 2数据验证。
+                fun(i,num-i,con+1);
+            }
+            else
+                return;
+        }
+    }
+}
+
+int main(){
+    cin>>n>>k;
+    fun(1,n,0);
+    cout<<ans;
+}
