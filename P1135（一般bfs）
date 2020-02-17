@@ -1,0 +1,54 @@
+//https://www.luogu.com.cn/problem/P1135
+//简单bfs
+#include<bits/stdc++.h>
+
+using namespace std;
+bool visit[200+5]={0};//访问标记
+int arr[200+5];
+int ans,n,a,b;
+struct str{
+    int cur;//当前位置
+    int step;//按键次数
+};
+
+void bfs(){//step：当前按键次数，cur：当前位置
+    queue<struct str>que;
+    struct str p;
+    p.cur=a,p.step=0;
+    que.push(p);
+    while(!que.empty()){
+        struct str temp=que.front();
+        que.pop();
+        int cur=temp.cur;
+        int step=temp.step;
+        if(cur==b){//广度优先，遇答案停止
+            ans=step;
+            break;
+        }
+        if(cur+arr[cur]<=n && !visit[cur+arr[cur]]){//向上
+            visit[cur+arr[cur]]=1;
+            struct str tem;
+            tem.cur=cur+arr[cur];
+            tem.step=step+1;
+            que.push(tem);
+        }   
+        if(cur-arr[cur]>0 && !visit[cur-arr[cur]]){//向下
+            visit[cur-arr[cur]]=1;
+            struct str tem;
+            tem.cur=cur-arr[cur];
+            tem.step=step+1;
+            que.push(tem);
+        }   
+    }
+}
+
+int main(){
+    cin>>n>>a>>b;
+    for(int i=1;i<=n;i++)
+        cin>>arr[i];
+    bfs();
+    if(ans==0&&a!=b)//特殊情况
+        cout<<-1;
+    else
+        cout<<ans;
+}
