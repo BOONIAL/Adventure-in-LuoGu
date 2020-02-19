@@ -1,0 +1,44 @@
+//https://www.luogu.com.cn/problem/P1996
+//链表
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+    int num;
+    struct node *next;
+};
+
+node* create(int num){//生成链表
+    struct node *p=(node*)malloc(sizeof(node));
+    p->num=num,p->next=NULL;
+    return p;
+}
+int main(){
+    int n,m;
+    cin>>n>>m;
+
+    //生成链表
+    node *h=(node*)malloc(sizeof(node));//头节点
+    h->num=1,h->next=NULL;
+    node *temp=h;//代替头节点进行迭代,保持头节点不变
+    for(int i=2;i<=n;i++){//生成链表
+        node *t=(node*)malloc(sizeof(node));
+        t->num=i,t->next=NULL;
+        temp->next=t;
+        temp=temp->next;//迭代
+    }
+
+    //约瑟夫问题求解
+    temp->next=h;//首尾相接
+    temp=temp->next;
+    while(temp!=temp->next){//首尾不同时
+        for(int i=1;i<m-1;i++){
+            temp=temp->next;
+        }
+        node *t=temp->next;
+        cout<<temp->next->num<<" ";//输出数字
+        temp->next=temp->next->next;//更改链表连接
+        temp=temp->next;//前进一步
+        free(t);//释放内存
+    }
+    cout<<temp->num;        
+}
