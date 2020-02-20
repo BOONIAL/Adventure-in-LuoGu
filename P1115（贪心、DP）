@@ -1,0 +1,24 @@
+//https://www.luogu.com.cn/problem/P1115
+//和大于0才有继续加的价值，否则应该舍去。不要忽略小于0找最大值的情况
+#include<bits/stdc++.h>
+using namespace std;
+
+queue<int>que;
+int n,t,s,ans=-(10000+5);
+int main(){
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>t;
+        que.push(t);
+    }
+    while(!que.empty()){
+        t=que.front();
+        que.pop();
+        s+=t;
+        ans=max(ans,s);
+        if(s<0){
+            s=0;
+        }
+    }
+    cout<<ans;
+}
