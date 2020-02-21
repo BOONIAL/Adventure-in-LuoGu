@@ -1,0 +1,33 @@
+//https://www.luogu.com.cn/problem/P1739
+//栈
+#include<bits/stdc++.h>
+
+using namespace std;
+char s[255+5],temp;
+int len,flag;//flag防止一直空栈的情况
+stack<char>sta;
+int main(){
+    while(cin>>temp){
+        if(temp=='@')
+            break;
+        else
+            s[len++]=temp;    
+    }
+    for(int i=0;i<len;i++){
+        if(s[i]=='('){
+            flag=1;
+            sta.push(s[i]);
+        } 
+        if(s[i]==')'){
+            flag=1;
+            if(!sta.empty()&&sta.top()=='(')//匹配则栈顶弹出，否则入栈
+                sta.pop();
+            else
+                sta.push(s[i]);
+        } 
+    }
+    if(sta.empty()&&flag)
+        cout<<"YES";
+    else
+        cout<<"NO";
+}
