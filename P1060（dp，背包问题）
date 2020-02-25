@@ -1,0 +1,35 @@
+//https://www.luogu.com.cn/problem/P1060
+//dp，背包问题
+//都是整数所以粒度为1
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int p,w;//价格，权重
+};
+node nod[25+5];
+int n,m,minn=999999,a[25+5][30000+5];//r：商品、c：价格。存储子问题的最优解。当前能购买该物品时s[i][j]=max(s[i-1][j],当前商品价+s[i-1][j-当前商品价格])
+
+void fun(){
+    for(int i=1;i<=m;i++){
+        for(int j=minn;j<=n;j++){
+            if(j>=nod[i].p){//当前如果能购买该物品
+                if(j-nod[i].p>=0)
+                    a[i][j]=max(a[i-1][j],nod[i].p * nod[i].w + a[i-1][j-nod[i].p]);
+                else
+                    a[i][j]=max(a[i-1][j],nod[i].p * nod[i].w);
+            }
+            else//当前如果无力购买该物品
+                a[i][j]=a[i-1][j];
+        }
+    }
+}
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++){
+        cin>>nod[i].p>>nod[i].w;
+        minn=min(minn,nod[i].p);
+    }
+    fun();
+    cout<<a[m][n];
+}
