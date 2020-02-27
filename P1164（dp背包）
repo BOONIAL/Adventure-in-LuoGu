@@ -1,0 +1,31 @@
+//https://www.luogu.com.cn/problem/P1164
+//https://www.luogu.com.cn/problemnew/solution/P1164
+//dfs或者dp
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,m,ans,a[100+5];
+bool vis[100+5];
+
+void dfs(int p,int cur){
+    if(p==n||cur==0){
+        if(cur==0)
+            ans++;
+        return;
+    }
+    else if(cur>0){
+        for(int i=p;i<=n;i++)
+            if(!vis[i]){
+                vis[i]=1;
+                dfs(i,cur-a[i]);
+                vis[i]=0;
+            }  
+    }
+}
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++)
+        cin>>a[i];
+    dfs(1,m);
+    cout<<ans;
+}
