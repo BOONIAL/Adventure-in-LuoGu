@@ -1,0 +1,26 @@
+//https://www.luogu.com.cn/problem/P1048
+//普通背包问题
+#include<bits/stdc++.h>
+
+using namespace std;
+struct node{
+    int time,v;
+};
+int t,m,ans[100+5][1000+5];
+node nd[100+5];
+int main(){
+    cin>>t>>m;
+    for(int i=1;i<=m;i++){
+        cin>>nd[i].time>>nd[i].v;
+    }
+    for(int i=1;i<=t;i++){
+        for(int j=1;j<=m;j++){
+            if(i-nd[j].time>=0)
+                ans[j][i]=max(ans[j-1][i],ans[j-1][i-nd[j].time]+nd[j].v);
+            else
+                ans[j][i]=ans[j-1][i];
+        }
+    }
+    cout<<ans[m][t];
+    
+}
