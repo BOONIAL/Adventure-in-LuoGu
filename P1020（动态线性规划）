@@ -1,0 +1,27 @@
+//https://www.luogu.com.cn/problem/P1020//https://www.luogu.com.cn/problemnew/solution/P1020
+//动态线性规划，模拟栈
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,cont,con,a[100000+5],l[100000+5],r[100000+5];//l最长降序列（不一定连续），r最长升序列。con、cont分别表示模拟栈的长度。
+int main(){
+   n=1;
+   while(cin>>a[n]) n++; 
+   n--;
+   cont=con=1;
+   l[1]=r[1]=a[1];
+   for(int i=2;i<=n;i++){
+        //维护最长降序列
+        if(l[cont]>=a[i])
+            l[++cont]=a[i];//加入模拟栈
+        else
+            l[upper_bound(l+1,l+1+cont,a[i],greater<int>())-l]=a[i];//更新栈的元素：将l内第一个小于a[i]的数的位置给a[i],此时栈长度不变。（不同于正常栈，非栈顶也可以插入元素，更像数组）
+
+        //维护最长升序列
+        if(r[con]<a[i])
+            r[++con]=a[i];//加入模拟栈
+        else
+            r[lower_bound(r+1,r+1+con,a[i])-r]=a[i];//将l内第一个大于等于a[i]的数的位置给a[i],此时栈长度不变
+   }
+   cout<<cont<<endl<<con;
+}
