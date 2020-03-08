@@ -1,0 +1,41 @@
+//https://www.luogu.com.cn/problem/P1449
+//栈
+#include<bits/stdc++.h>
+using namespace std;
+
+string s;
+stack <int> sta;
+int i,num;
+int main(){
+    cin>>s;
+    while(s[i]!='@' && i<s.length()){
+        if(isdigit(s[i]))//从字符串元素识别数字
+            num=10*num+(s[i]-'0');
+        else if(s[i]=='.'){
+            sta.push(num);
+            num=0;
+        }      
+        else if(s[i]=='+'){
+            int temp=sta.top();
+            sta.pop();
+            sta.top()+=temp;
+        }
+        else if(s[i]=='-'){
+            int temp=sta.top();
+            sta.pop();
+            sta.top()-=temp;
+        }
+        else if(s[i]=='*'){
+            int temp=sta.top();
+            sta.pop();
+            sta.top()*=temp;
+        }
+        else if(s[i]=='/'){
+            int temp=sta.top();
+            sta.pop();
+            sta.top()/=temp;
+        }
+        i++;
+    }
+    cout<<sta.top();
+}
