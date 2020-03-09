@@ -1,0 +1,21 @@
+//https://www.luogu.com.cn/problem/P1030，https://www.luogu.com.cn/problemnew/solution/P1030
+//二叉树遍历：前序（中左右）、中序（左中右）、后序（左右中）。后序的最后一个元素是总树的根也是前序的第一个元素（左右中），之后同理分治。
+#include<bits/stdc++.h>
+using namespace std;
+
+string inord,pord;//中序，后序
+void fun(string a,string b){//中序、后序
+    if(a.length()>0){
+    char c=b[b.length()-1];//后序的最后一个元素
+    cout<<c;
+    int k=a.find(c);//分界线
+    fun(a.substr(0,k),b.substr(0,k));
+    fun(a.substr(k+1),b.substr(k,a.length()-k-1));//a绕开k,b从k开始，用测试数据就可以理解
+    }
+}
+int main(){
+    cin>>inord;
+    cin>>pord;
+    fun(inord,pord);
+}
+
