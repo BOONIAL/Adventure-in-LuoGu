@@ -1,0 +1,18 @@
+//https://www.luogu.com.cn/problem/P1229
+//二叉树遍历理解：只知道前序和后序无法处理只有一个儿子的情况，因为无法确定是左还是右儿子。
+//只有一个儿子 的节点 才会在知道 前序后序 的情况下有不同的中序遍历，所以将题目转化成找 只有一个儿子的节点个数。
+//可以很容易的找出这类节点在前序后序中出现的规律。（前序中出现AB，后序中出现BA，则这个节点只有一个儿子）
+//每个这类节点有两种中序遍历（及儿子在左，儿子在右）根据乘法原理中序遍历数为 2^节点个数 种
+#include<bits/stdc++.h>
+using namespace std;
+
+string a,b;
+int ans;
+int main(){
+    cin>>a>>b;
+    for(int i=0;i<a.length()-1;i++)//
+        for(int j=1;j<b.length();j++)
+            if(a[i]==b[j] && a[i+1]==b[j-1])
+                ans++;
+    cout<<(1<<ans);
+}
