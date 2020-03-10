@@ -1,0 +1,60 @@
+//https://www.luogu.com.cn/problem/P1364
+//二叉树搜索：构造二叉树，用bfs搜索节点之间的路程。
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{//二叉树
+    int val,left,right,far;//far：父节点
+}a[100+5];
+
+int n,m,sum,vis[100+5];//b：记忆访问过的节点
+int ans=999999999;
+void fun(int cur,int ori,int tar,int pace){//bfs搜索节点之间的路程。cur：当前节点、ori：起点人数、tar目标节点，pace：步数
+    if(a[cur].val==0||cur==tar){
+        if(cur==tar)//到达
+            m=min(m,pace*ori);//选择最短路径
+        return;
+    }
+    else{//三向搜索（左右儿子和父亲）
+        for(int i=0;i<3;i++){
+            if(i==0&&!vis[a[cur].far]){
+                vis[a[cur].far]=1;
+                fun(a[cur].far,ori,tar,pace+1);
+                vis[a[cur].far]=0;
+            }
+            if(i==1&&!vis[a[cur].left]){
+                vis[a[cur].left]=1;
+                fun(a[cur].left,ori,tar,pace+1);
+                vis[a[cur].left]=0;
+            }
+            if(i==2&&!vis[a[cur].right]){
+                vis[a[cur].right]=1;
+                fun(a[cur].right,ori,tar,pace+1);
+                vis[a[cur].right]=0;
+            }
+        }
+    }
+}
+
+int main(){
+    a[1].far=0;//初始化
+    cin>>n;
+    for(int i=1;i<=n;i++){//构建二叉树
+        cin>>a[i].val>>a[i].left>>a[i].right;
+        if(a[i].left>0)
+            a[a[i].left].far=i;
+        if(a[i].right>0)
+            a[a[i].right].far=i;
+    }
+    for(int i=1;i<=n;i++){//做终点
+        sum=0;
+        for(int j=1;j<=n;j++){//某节点到终点的距离
+            m=999999999;
+            vis[100+5]={0};
+            fun(j,a[j].val,i,0);
+            sum+=m;
+        }
+        ans=min(ans,sum);
+    }
+    cout<<ans;
+}
