@@ -1,0 +1,35 @@
+//https://www.luogu.com.cn/problem/P1024
+//由根与根之差的绝对值≥1知：以1为基本单位，如果左右两端乘积为0则一定由根，如果乘积相等则一定没根。
+//所以以1为单位遍历[-100,100]
+#include<bits/stdc++.h>
+using namespace std;
+
+double a,b,c,d,l,m,r,x1,x2,s;
+double fun(double x){
+    return a*x*x*x+b*x*x+c*x+d;
+}
+
+int main(){
+    scanf("%lf%lf%lf%lf",&a,&b,&c,&d);
+    for(int i=-100;i<100;i++){
+        l=i,r=i+1;
+        x1=fun(l),x2=fun(r);
+        if(x1==0){//判断左端点能否直接输出。如果判断同时右端点会重合，因为右端点会作为下次的左端点。
+            printf("%.2lf ",l);
+            s++;
+        }
+        if(x1*x2<0){//二分查找
+            while(r-l>=0.001){//保留两位小数
+                m=(l+r)/2;
+                if(fun(m)*fun(r)<=0)
+                    l=m;
+                else
+                    r=m;
+            }
+            printf("%.2lf ",r);
+            s++;
+        }
+        if(s==3)
+            break;
+    }
+}
