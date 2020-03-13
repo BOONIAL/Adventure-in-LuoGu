@@ -1,0 +1,37 @@
+//https://www.luogu.com.cn/problem/P1873
+//二分查找
+#include<bits/stdc++.h>
+using namespace std;
+
+long n,m,maxn,height,sum,t,b,a[1000000+5];//height：高度。t,b：顶层和底层
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++){
+        cin>>a[i];
+        maxn=max(maxn,a[i]);
+    }
+    t=maxn;
+    height=(t+b)/2;
+    while(1){
+        for(int i=1;i<=n;i++)
+            if(a[i]-height>0)
+                sum+=(a[i]-height);
+        if(sum>=m){//砍多了,高度上升
+            sum=0;
+            for(int i=1;i<=n;i++)
+                if(a[i]-height-1>0)
+                    sum+=(a[i]-height-1);
+            if(sum<m){
+                cout<<height;
+                break;
+            }
+            b=height;//底层升高
+            height=(t+b)/2;
+        }
+        if(sum<m){//砍少了，高度下降
+            t=height;//顶层降低
+            height=(t+b)/2;
+        }
+        sum=0;
+    }
+}
