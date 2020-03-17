@@ -1,0 +1,35 @@
+//https://www.luogu.com.cn/problem/P1621
+//埃氏筛筛选质数、查并集
+#include<bits/stdc++.h>
+using namespace std;
+
+int a,b,p,ans,f[100000+5];//f：元素所属集合
+bool np[100000+5];//是否是质数
+
+int find(int x){//找到元素所属的集合
+    return x==f[x]?x:f[x]=find(f[x]);
+}
+
+int main(){
+    cin>>a>>b>>p;
+    for(int i=a;i<=b;i++)//初始化,元素的集合等于本身
+        f[i]=i;
+    ans=b-a+1;
+    for(int i=2;i<=b;i++){
+        if(!np[i]){
+            if(i>=p){//质数大于p才开始合并
+                for(int j=2*i;j<=b;j+=i){
+                    if(j-i>=a && find(j)!=find(j-i)){//将当前被筛的数与上一个被筛的数合并（第一个被筛的数和质因数本身合并），注意这两个数都要在a~b之间才合并
+                        f[find(j)]=find(j-i);//合并
+                        ans--;
+                    }
+                    np[j]=1;
+                } 
+            }
+            else
+                for(int j=2*i;j<=b;j+=i)//筛选
+                    np[j]=1;
+        }
+    }
+    cout<<ans;
+}
