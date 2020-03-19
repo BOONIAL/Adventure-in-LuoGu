@@ -1,0 +1,68 @@
+//https://www.luogu.com.cn/problem/P1892
+//普通合并以及将敌人的敌人合并
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int a,b;
+};
+node e[5000+5],f[5000+5];
+int n,m,c[5000+5],j,k,vis[5000+5],ans;
+char ch;
+
+int find(int x){//模板
+    if(c[x]==x)
+        return x;
+    else
+        return c[x]=find(c[x]);
+}
+
+void com(int x,int y){
+    c[find(y)]=find(x);
+    return ;
+}
+
+int main(){
+    j=k=1;
+    cin>>n>>m;
+    for(int i=1;i<=n;i++)
+        c[i]=i;
+    for(int i=1;i<=m;i++){
+        cin>>ch;
+        if(ch=='E'){
+            cin>>e[j].a>>e[j].b;
+            j++;
+        }
+        if(ch=='F')
+            cin>>f[k].a>>f[k++].b;    
+    }
+
+    for(int i=1;i<k;i++)
+        com(f[i].a,f[i].b);//普通合并
+        
+    for(int i=1;i<j;i++){
+        if(vis[e[i].a]){//如果值在此前出现过
+            for(int t=1;t<i;t++){
+                if(e[t].a==e[i].a)//找同样有e[i].a记录
+                    com(e[i].b,e[t].b);//将敌人的敌人合并
+                if(e[t].b==e[i].a)
+                    com(e[i].b,e[t].a);
+            }  
+        }
+        if(vis[e[i].b]){
+            for(int t=1;t<i;t++){
+                if(e[t].a==e[i].b)
+                    com(e[i].a,e[t].b);
+                if(e[t].b==e[i].b)
+                    com(e[i].a,e[t].a);
+            }  
+        }
+        vis[e[i].a]=vis[e[i].b]=1;//记录
+    }
+    for(int i=1;i<=n;i++)
+        if(c[i]==i){
+            //cout<<i<<endl;
+            ans++;
+        }  
+    cout<<ans;
+}
