@@ -1,0 +1,45 @@
+//https://www.luogu.com.cn/problem/P1113
+//拓扑排序、dag
+//寻找链中累积值最大的作为答案
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,gx[10000+1][10000+1],ru[10000+1],chu[10000+1],a[10000+1],c[10000+1];//gx：事件关系、ru：入度、chu：出度、a：节点时间。缩小长度苟了下来
+int t,b,ans;
+queue<int>q;
+int main(){
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>t>>a[i]>>b;
+        c[i]=a[i];//备份
+        while(b){
+            gx[b][i]=1;
+            chu[b]++;
+            ru[i]++;
+            cin>>b;
+        }
+    }
+    for(int i=1;i<=n;i++){
+        if(ru[i]==0){//入度为0入队
+            q.push(i);
+            ans=max(ans,a[i]);
+        }
+    }
+    while(!q.empty()){
+        t=q.front();
+        q.pop();
+        for(int i=1;i<=n;i++){
+            if(gx[t][i]==0) continue;
+            a[i]=max(a[t]+c[i],a[i]);//确保该节点一直是最大值，应为队列遍历无序且不是深度优先，反正只要时间最长链，不会影响正确答案就行
+            ru[i]--;
+            if(ru[i]==0){
+                if(chu[i]==0){//如果是链的末端，更新答案
+                    ans=max(ans,a[i]);
+                }
+                q.push(i);
+            }  
+        }
+    }
+    cout<<ans;
+}
+    
