@@ -1,0 +1,29 @@
+//https://www.luogu.com.cn/problem/P3916
+//反向建边 + dfs
+//按题目来每次考虑每个点可以到达点编号最大的点，不如考虑较大的点可以反向到达哪些点.
+//循环从N到1，则每个点i能访问到的结点的A值都是i.
+//每个点访问一次，这个A值就是最优的，因为之后如果再访问到这个结点那么答案肯定没当前大了
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,m,b,c,a[100000+5];
+vector<int> ve[100000+5];//反向建边，即把节点的逆向节点储存
+
+void dfs(int x,int y){//y节点最长能回溯到哪
+    if(a[x]) return;
+    a[x]=y;
+    for(int i=0;i<ve[x].size();i++)
+        dfs(ve[x][i],y);
+}
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++){
+        cin>>b>>c;
+        ve[c].push_back(b);//反向建边  
+    }
+    for(int i=n;i>=1;i--)
+        dfs(i,i);
+    for(int i=1;i<=n;i++)
+        cout<<a[i]<<" ";
+}
