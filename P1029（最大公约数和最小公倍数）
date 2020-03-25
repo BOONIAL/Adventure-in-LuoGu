@@ -1,0 +1,31 @@
+//https://www.luogu.com.cn/problem/P1029
+//最大公约数和最小公倍数
+#include<bits/stdc++.h>
+using namespace std;
+
+double a,b,p,q,ans;
+int gcd(int x,int y){
+    if(x%y==0)
+        return y;
+    else
+        return gcd(y,x%y);
+}
+
+int main(){
+    cin>>a>>b;
+    for(int i=1;i*a<=b;i++){
+        p=i*a;
+        q=b/(p/a);
+        if(q==int(q)){
+            if(p>=q && gcd(p,q)==a){
+                //cout<<p<<" "<<q<<endl;
+                ans++;
+            }   
+            else if(q>p && gcd(q,p)==a){
+                //cout<<p<<" "<<q<<endl;
+                ans++;
+            }
+        } 
+    }
+    cout<<ans;
+}
