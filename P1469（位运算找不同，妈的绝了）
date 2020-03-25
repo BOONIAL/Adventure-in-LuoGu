@@ -1,0 +1,15 @@
+//https://www.luogu.com.cn/problem/P1469
+#include<bits/stdc++.h>
+using namespace std;
+int x,n;
+int main()
+{
+    scanf("%d",&n);
+    for(int i=1;i<=n;++i)
+    {
+        int zz;scanf("%d",&zz);
+        x^=zz;//异或 运算符
+    }
+    cout<<x<<endl;
+    return 0;
+}
