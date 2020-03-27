@@ -1,0 +1,28 @@
+//https://www.luogu.com.cn/problem/P3406
+//差分数组、前缀和：https://blog.csdn.net/weixin_30360497/article/details/96756271
+//差分数组、前缀和可以实现记忆化搜索，节约了时间
+#include<bits/stdc++.h>
+using namespace std;
+
+long long n,m,t,h,ans,sum,d[100005],a,b,c;
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++){
+        cin>>t;
+        if(h!=0){
+            if(h>t)
+                d[t]++,d[h]--;//差分数组的性质。修改[l,r]的差分，只需修改d[l]和d[1+r]的值。
+                //因为d[l]=a[l]-a[l-1],在[l,r]内操作则区间内的差值不变，而在与区间接触的地方则有变化，所以只需要变两个地方
+            if(t>h)
+                d[h]++,d[t]--;
+        }
+        h=t;
+    }
+    for(int i=1;i<n;i++){
+        sum+=d[i];
+        cin>>a>>b>>c;
+        if(sum!=0) ans+=min(a*sum,b*sum+c);
+    }
+    if(m<=1) ans=0;
+    cout<<ans;
+}
