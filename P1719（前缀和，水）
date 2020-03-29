@@ -1,0 +1,37 @@
+//https://www.luogu.com.cn/problem/P1719
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,a[125][125],b[125][125];
+int t,ans;
+int main(){
+    cin>>n;
+    ans=-99999999;//存储答案
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>a[i][j];
+            t+=a[i][j];
+            b[i][j]=t;//前缀和
+        }
+        t=0;
+    }      
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){//行起点
+                t=0;
+            for(int k=i;k<=n;k++){//列
+                t=0;
+                for(int l=j;l<=n;l++){
+                    t+=b[l][k]-b[l][k-i];
+                    if(t>0)
+                        ans=max(ans,t);
+                    else{
+                        break;//如果累加不大于0没必要继续
+                    }
+                }
+            }
+        }      
+    }
+    cout<<ans;
+}
+
+        
