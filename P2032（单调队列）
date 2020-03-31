@@ -1,0 +1,23 @@
+//https://www.luogu.com.cn/problem/P2032
+//https://blog.csdn.net/LJD201724114126/article/details/80663855
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,ans=0,k;
+int a[2000005],f[20000005],h=1,t=1;//数据范围应该是2*10^6，，因为这个，，我一直80，，，
+//f记录下标，，h为头，，t为尾
+int main(){
+    scanf("%d%d",&n,&k);
+    for(int i=1;i<=n;i++)scanf("%d",&a[i]);
+    f[1]=1;
+    for(int i=1;i<=n;i++){      
+        if(f[h]<=i-k)//如果f[h]不在里面，就用下一个最大值
+            h++; 
+        while(t>=h && a[f[t]]<=a[i]) //从尾开始，选择此数位置。维护一个降序列，头总是最大的，如果存在一个新元素比头大，则弹出旧头。
+            t--; 
+        f[++t]=i;//尾部元素（定义了新尾）。同时可能挤占了原来某值的位置，因为该值即小于新值，又会先弹出，所以没有存在的必要。
+        if(i>=k)//超出尺度，则每次都要输出头
+            printf("%d\n",a[f[h]]);
+    }
+return 0;
+}
