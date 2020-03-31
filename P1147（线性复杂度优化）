@@ -1,0 +1,25 @@
+//https://www.luogu.com.cn/problem/P1147
+//线性复杂度优化 / 离散化
+//本质是找d=1的等差数列和，用二分查找
+#include<bits/stdc++.h>
+using namespace std;
+
+long long m,l,r,mid,t;
+int main(){
+    cin>>m;
+    for(int i=1;i<m;i++){//找首项
+        l=1,r=m;
+        while(l+1!=r){//二分查找，找n
+            mid=(l+r)/2;
+            t=(2*i+mid-1)*mid;
+            if(t==2*m){//判断等差数列的和是否满足条件
+                cout<<i<<" "<<i+mid-1<<endl;
+                break;
+            }
+            else if(t>2*m)
+                r=mid;
+            else
+                l=mid;
+        }
+    }
+}
