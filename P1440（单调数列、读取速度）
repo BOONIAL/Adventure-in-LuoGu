@@ -1,0 +1,21 @@
+//https://www.luogu.com.cn/problem/P1440
+//单调数列,scanf和printf比cin和cout快
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,m,a[2000005];
+int h,t,f[2000005];
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++)
+        scanf("%d",&a[i]);
+    h=t=1;
+    f[1]=1;
+    cout<<0<<endl;
+    for(int i=1;i<n;i++){
+        if(f[h]<=i-m) h++;
+        while(t>=h&&a[f[t]]>=a[i]) t--;
+        f[++t]=i;
+        printf("%d\n",a[f[h]]);
+    }
+}
