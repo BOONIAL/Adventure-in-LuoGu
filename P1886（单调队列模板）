@@ -1,0 +1,36 @@
+//https://www.luogu.com.cn/problem/P1886
+//维护两个单调的队列
+//更详细的再P2032
+#include<bits/stdc++.h>
+using namespace std;
+
+long long n,k,a[1000005],b[1000005],c[1000005],f[1000005];
+long long h=1,t=1,j,m;
+
+int main(){
+    scanf("%lld%lld",&n,&k);
+    for(int i=1;i<=n;i++) scanf("%lld",&a[i]);
+    f[1]=1;
+    for(int i=1;i<=n;i++){
+        if(f[h]<=i-k) h++;
+        while(t>=h && a[f[t]]<=a[i]) t--;
+        f[++t]=i;
+        if(i>=k){
+            c[++m]=a[f[h]];
+        }
+    }
+    f[1]=1,h=t=1;
+    for(int i=1;i<=n;i++){
+        if(f[h]<=i-k) h++;
+        while(t>=h && a[f[t]]>=a[i]) t--;
+        f[++t]=i;
+        if(i>=k){
+            b[++j]=a[f[h]];
+        }
+    }
+    for(int i=1;i<=j;i++)
+        cout<<b[i]<<" ";
+    cout<<endl;
+    for(int i=1;i<=m;i++)
+        cout<<c[i]<<" ";
+}
