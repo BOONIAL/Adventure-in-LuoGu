@@ -1,0 +1,46 @@
+//https://www.luogu.com.cn/problem/P1638
+//类单调数列，复杂度小于O(n^2),大概是O(n)。
+//思路：从头开始先找到一个覆盖全部作家的队列，然后从头开始优化。
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,m,a,b,f[1000005];
+int h,t,ans,x,vis[1000005];
+int main(){
+    ans=1000005;
+    cin>>n>>m;
+    for(int i=1;i<=n;i++) scanf("%d",&f[i]);
+    h=t=1,x=m;
+    while(t>=h){
+        if(t==n+2)
+            break;
+        if(x==0){//覆盖全部作家
+            int temp=t-h;//队列长度（队列尾是t-1，因为t初始化为1。）
+            if(vis[f[h]]>1){//队头在队列中不止出现一次
+                if(temp<ans){//能否更新答案
+                    ans=temp;
+                    a=h+1,b=t-1;//队头在队列中不止出现一次，所以队列可以优化一个单位（少一个成员）
+                }
+            }
+            else if(vis[f[h]]==1){
+                if(temp<ans){
+                    ans=temp;
+                    a=h,b=t-1;
+                }
+                x++;//队头被优化后没有全覆盖，所以要再找
+            }
+            vis[f[h]]--;//队头弹出
+            h++;
+        }
+        else if(!vis[f[t]]){//在队列中第一次出现
+            x--;
+            vis[f[t]]++;
+            t++;
+        }
+        else if(vis[f[t]]){//不止一次出现
+            vis[f[t]]++;
+            t++;
+        }
+    }
+    cout<<a<<" "<<b;
+}
