@@ -1,0 +1,51 @@
+//https://www.luogu.com.cn/problem/P3374
+//树状数组
+//https://blog.csdn.net/flushhip/article/details/79165701
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,m,a[500005],b[500005];
+
+int lowbit(int x){//返回某一个数的二进制表示中最低的一位
+    return x&(-x);
+}
+
+int query(int k){//向前查询1到k的和
+    int sum=0;
+    while(k>0){
+        sum+=b[k];
+        k-=lowbit(k);//找下一层前缀和
+    }
+    return sum;
+}
+
+void update(int k,int val){
+    while(k<=n){
+        b[k]+=val;
+        k+=lowbit(k);//找上一层的前缀和（管理的元素更多且在后面的）
+    }
+}
+
+void build(){
+    for(int i=1;i<=n;i++){
+        b[i]+=a[i];
+        int j=i+lowbit(i);//找上层
+        if(j<=n) b[j]+=b[i];
+    }
+}
+
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++)
+        cin>>a[i];
+    build();
+    int t,x,y;
+    for(int i=1;i<=m;i++){
+        cin>>t>>x>>y;
+        if(t==1)
+            update(x,y);
+        else
+            cout<<query(y)-query(x-1)<<endl;  
+    }
+}
+
