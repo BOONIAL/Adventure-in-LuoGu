@@ -1,0 +1,47 @@
+//https://www.luogu.com.cn/problem/P3368
+//利用差分性质 a[i]=b[1]+...+b[i]，要访问a[i]求前i个b即可。其中b[i]=a[i]-a[i-1]。树状数组用于加速
+#include<bits/stdc++.h>
+using namespace std;
+
+long long n,m,a,b[500005];
+
+int lowbit(int x){
+    return x&-x;
+}
+void build(int x,long long y){
+    while(x<=n){
+        b[x]+=y;
+        x+=lowbit(x);
+    }
+}
+long long ask(int x){
+    long long sum=0;
+    while(x>0){
+        sum+=b[x];
+        x-=lowbit(x);
+    }
+    return sum;
+}
+
+int main(){
+    cin>>n>>m;
+    long long t=0;
+    for(int i=1;i<=n;i++){
+        scanf("%lld",&a); 
+        build(i,a-t);
+        t=a;
+    }
+    int c,d,e,f;
+    for(int i=1;i<=m;i++){
+        scanf("%d",&c);
+        if(c==1){
+            scanf("%d%d%d",&d,&e,&f);
+            build(d,f);
+            build(e+1,-f);
+        }
+        else{
+            scanf("%d",&d);  
+            cout<<ask(d)<<endl;
+        }
+    }
+}
